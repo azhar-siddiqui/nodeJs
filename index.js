@@ -1,27 +1,19 @@
 require("dotenv").config();
 const dbConnect = require("./mongodb");
 
-const insert = async () => {
+const update = async () => {
   const db = await dbConnect();
-  const result = await db.insert([
+  const result = await db.updateOne(
+    { name: "iPhone 6" },
     {
-      name: "iPhone 6",
-      brand: "apple",
-      price: "1000$",
-      category: "mobile",
-    },
-    {
-      name: "iPhone 7",
-      brand: "apple",
-      price: "1200$",
-      category: "mobile",
-    },
-  ]);
+      $set: { name: "iPhone 8" },
+    }
+  );
   if (result.acknowledged) {
-    console.log("data Insert");
+    console.log("data updated");
   } else {
-    console.log("data Failed");
+    console.log("Failed");
   }
 };
 
-insert();
+update();
