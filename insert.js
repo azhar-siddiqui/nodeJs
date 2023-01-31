@@ -1,4 +1,3 @@
-require("dotenv").config();
 const dbConnect = require("./mongodb");
 
 const insert = async () => {
