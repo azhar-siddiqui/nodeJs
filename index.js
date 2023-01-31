@@ -1,19 +1,28 @@
-require("dotenv").config();
 const dbConnect = require("./mongodb");
+const express = require("express");
+require("dotenv").config();
+const app = express();
 
-const update = async () => {
-  const db = await dbConnect();
-  const result = await db.updateOne(
-    { name: "iPhone 6" },
-    {
-      $set: { name: "iPhone 8" },
-    }
-  );
-  if (result.acknowledged) {
-    console.log("data updated");
-  } else {
-    console.log("Failed");
-  }
-};
+app.use(express.json());
 
-update();
+app.get("/", async (req, resp) => {
+  let data = await dbConnect();
+  data = await data.find().toArray();
+  resp.send(data);
+});
+
+app.post("/post", async (req, resp) => {
+  let data = await dbConnect();
+  let result = await data.insertOne(req.body);
+  resp.send(result);
+});
+
+// app.put("/put", async (req, resp) => {
+//   let data = await dbConnect();
+//   let result = await data.updateOne(
+//     req.body({ name: req.body.name }, { $set: req.body })
+//   );
+//   resp.send(result);
+// });
+
+app.listen(4000);
